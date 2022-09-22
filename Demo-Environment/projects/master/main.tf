@@ -5,6 +5,13 @@ provider "google" {
   zone    = "us-central1-c"
 }
 
+module "network-services" {
+  # Network resources
+  source = "../../modules/network"
+  gcp_network = var.gcp_network
+  project_name = var.project
+}
+
 resource "google_compute_network" "demo_vpc_network" {
   name = "demo-network"
 }
@@ -28,7 +35,7 @@ resource "google_compute_instance" "demo_instance" {
 
   network_interface {
     # A default network is created for all GCP projects
-    network = "default"
+    network = "demo-network"
     access_config {
     }
   }
