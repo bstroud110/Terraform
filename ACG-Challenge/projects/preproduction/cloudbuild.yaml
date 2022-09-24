@@ -1,0 +1,7 @@
+steps:
+- name:  'python:3'
+  id:  Check python package
+  entrypoint:  'bash'
+  args:  
+    - '-c'
+    - ' |'

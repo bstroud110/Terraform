@@ -8,17 +8,17 @@ Personal Brand / Resume website
 Using (all of) HTML, CSS, and JavaScript (JS)
 Feel free to use a rich template—or start with a very basic example, if you’re ambitious
 Must include your name and link to your LinkedIn profile
-Should ideally list you having the Associate Cloud Engineer (ACE) cert
-I would also consider the Cloud Digital Leader (CDL) cert, since it’ll be paired with all this practical experience.
-And I could be convinced to overlook this point (so don’t let this block you) but I do very strongly suggest ACE, in particular.
-I also know this foundation will help you a lot with this challenge, because I’ve made a course for the Associte Cloud Engineer cert. (To be clear, you do NOT need to take my course or any other A Cloud Guru training to join this challenge.)
+
 A section/page/link to describe your challenge entry (see below), including a least one architecture diagram image
+
 Must include a visitor hit counter (via Javascript call to your own API; see below)
 Hosting:
 Set it up as a static site on Google Cloud Storage (GCS)
+
 Give it any custom domain name you want (this will cost for registration) — yoursite.com (or any TLD)
 You could — but don’t have to — use Cloud Domains for this ($12/year for .com)
 Use Cloud DNS
+
 Use a Global HTTPS Cloud Load Balancer (this will cost to provision)
 HTTPS is definitely required
 Use Cloud CDN for caching
@@ -53,7 +53,10 @@ If you have the time and inclination, use Terraform IaC to create your setup in 
 
 Yet to build:
     Firestore
+        -datastore mode
     Cloud Run
+        -Tie it to my repository
+            -might need to review my repo strategy for this
     Cloud Build
     Services - APIs for GCP items like GKE
 
