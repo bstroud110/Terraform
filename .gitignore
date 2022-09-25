@@ -2,4 +2,4 @@ keys
 *.json
 .terraform
 .terraform*
-
+terraform*
