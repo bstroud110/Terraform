@@ -6,7 +6,7 @@ provider "google" {
 }
 
 module "network-services" {
-  # Network resources
+  # Network resources - not yet in service
   source = "../../modules/network"
   gcp_network = var.gcp_network
   project_name = var.project
