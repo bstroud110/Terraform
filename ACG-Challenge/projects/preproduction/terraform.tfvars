@@ -9,6 +9,7 @@ gcp_api_service_list = [
     "sourcerepo.googleapis.com",            #Need it
     "datastore.googleapis.com",             #Need it
     "sqladmin.googleapis.com",
+    "redis.googleapis.com",
     "servicenetworking.googleapis.com",
     "networkmanagement.googleapis.com",
 ]
