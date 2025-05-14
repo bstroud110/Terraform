@@ -7,6 +7,7 @@ import fileinput
 
 ENV = input('What environment is this for? (master or preproduction):  ')
 OLDPRJ = input('Please enter the old project name:  ')
+    #Check Terraform > ACG-Challenge > projects > preproduction > terraform.tfvars
 NEWPRJ = input('Please enter the new project name:  ')
 
 if ENV.lower() == 'master':
