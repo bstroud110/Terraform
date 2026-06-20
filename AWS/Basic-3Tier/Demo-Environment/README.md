@@ -25,6 +25,10 @@ aws configure
 
 
 TO DO:
+Terraform:
+    Implement variables
+    Consider modules
+
 S3 Bucket:
     Best practices of Terraform involve storing state file in an S3 bucket.  As of 6/20/2026, current form stores state file locally.
 
