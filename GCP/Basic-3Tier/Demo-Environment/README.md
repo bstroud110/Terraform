@@ -1,6 +1,9 @@
 Important pre work that needs to be implemented in the bootstrap.sh script.
 
-gcloud config set project playground-s-11-814f9d64
+gcloud init
+	#Intialize local environment variables (ie. project) to pass to terraform
+
+gcloud config set project <projectID> #Set during gcloud init, but can be used to update/change as needed
 
 gcloud iam service-accounts keys create keys/terraform-sa-instance.json --iam-account terraform-sa@playground-s-11-814f9d64.iam.gserviceaccount.com
 
