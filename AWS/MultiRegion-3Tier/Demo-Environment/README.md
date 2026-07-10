@@ -1,11 +1,12 @@
 GOAL:  Define a simple AWS 3 Tier environment using Terraform.
 
-ARCHITECTURE DIAGRAM:  Multi-Region-3-Tier-Architecture.drawio
+ARCHITECTURE DIAGRAM:  Multi-Region-3-Tier-Architecture.jpg
 
 STRUCTURE:  
     3-Tier Architecture
     Required Provider:  AWS
-    Region:  us-east1, us-central1
+    Region:  us-east1
+    Availability Zones:  us-east-1a, us-east-1c
     VPC
         CIDR:  10.0.0.0/16
         Enable DNS = true
