@@ -5,11 +5,11 @@ output "vpc_id" {
 
 output "public_subnet_id" {
   description = "Details of the public subnet"
-  value       = aws_subnet.demopublicsubnet.id
+  value       = aws_subnet.demopublicsubnet[*].id
 }
 
-output "aws_instance_public_dns" {
-  description = "Public DNS hostname of the NGINX EC2 Instance"
-  value       = aws_instance.demonginx.public_dns
-}
+//output "aws_instance_public_dns" {
+//  description = "Public DNS hostname of the NGINX EC2 Instance"
+//  value       = aws_instance.demonginx.public_dns[*].id
+//}
 

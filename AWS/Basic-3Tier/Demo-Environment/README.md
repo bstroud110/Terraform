@@ -33,7 +33,10 @@ S3 Bucket:
     Best practices of Terraform involve storing state file in an S3 bucket.  As of 6/20/2026, current form stores state file locally.
 
 Security Group work:
+    -Add a rule to allow inbound SSH on port 22
+        -Added successfully
     Create security group for connectivity between App server and database
+
 
 EC2 Work
     Validate configuration of EC2 instances

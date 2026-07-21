@@ -16,6 +16,13 @@ data "aws_ssm_parameter" "amzn2_linux" {
   name = "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
 }
 
+locals {
+  azs = [
+    "us-east-1a",
+    "us-east-1c"
+  ]
+}
+
 # Create a VPC
 resource "aws_vpc" "demovpc" {
   #name                 = "demovpc"
@@ -33,20 +40,41 @@ resource "aws_internet_gateway" "demoig" {
 }
 
 resource "aws_subnet" "demopublicsubnet" {
+  for_each = toset (local.azs)
+
   vpc_id     = aws_vpc.demovpc.id
   cidr_block = "10.0.0.0/24"
+  availability_zone = each.key
   #gateway_id = aws_internet_gateway.demoig.id
   map_public_ip_on_launch = true
+
+  tags = {
+    Name = "public-${each.key}"
+  }
 }
 
 resource "aws_subnet" "demoprivatesubnet1" {
+  for_each = toset(local.azs)
+
   vpc_id     = aws_vpc.demovpc.id
   cidr_block = "10.0.1.0/24"
+  availability_zone = each.key
+
+  tags = {
+    Name = "private-${each.key}"
+  }
 }
 
 resource "aws_subnet" "demoprivatesubnet2" {
+  for_each = toset(local.azs)
+
   vpc_id     = aws_vpc.demovpc.id
   cidr_block = "10.0.2.0/24"
+  availability_zone = each.key
+
+  tags = {
+    Name = "private-${each.key}"
+  }
 }
 
 resource "aws_route_table" "demoroutetable" {
@@ -60,9 +88,18 @@ resource "aws_route_table" "demoroutetable" {
 
 #Tie the AWS route table and AWS Subnet together
 resource "aws_route_table_association" "demoroutetableassociation" {
-  subnet_id      = aws_subnet.demopublicsubnet.id
+  for_each = toset(local.azs)
+
+  subnet_id      = aws_subnet.demopublicsubnet[each.key]
   route_table_id = aws_route_table.demoroutetable.id
 }
+
+resource "aws_lb" "demopubliclb" {
+  name = "demopublic-lb"
+  load_balancer_type = "application"
+  subnets = values(aws_subnet.demopublicsubnet)[*].id
+}
+
 
 # Security groups
 resource "aws_security_group" "nginxsecuritygroup" {
@@ -106,9 +143,11 @@ resource "aws_security_group" "appsecuritygroup" {
 #EC2 Instances
 
 resource "aws_instance" "demonginx" {
+  for_each = toset(local.azs)
+
   ami                         = nonsensitive(data.aws_ssm_parameter.amzn2_linux.value)
   instance_type               = "t3.micro"
-  subnet_id                   = aws_subnet.demopublicsubnet.id
+  subnet_id                   = aws_subnet.demopublicsubnet[each.key]
   vpc_security_group_ids      = [aws_security_group.nginxsecuritygroup.id]
   user_data_replace_on_change = true
 
@@ -140,9 +179,11 @@ EOF
 }
 
 resource "aws_instance" "demoappserver" {
+  for_each = toset(local.azs)
+
   ami                         = nonsensitive(data.aws_ssm_parameter.amzn2_linux.value)
   instance_type               = "t3.micro"
-  subnet_id                   = aws_subnet.demoprivatesubnet1.id
+  subnet_id                   = aws_subnet.demoprivatesubnet1[each.key]
   vpc_security_group_ids      = [aws_security_group.nginxsecuritygroup.id]
   user_data_replace_on_change = true
 
@@ -161,20 +202,24 @@ EOF
 #Group subnets the databse will connect to
 #Currently needs work
 resource "aws_db_subnet_group" "demodbsubnets" {
+  for_each = toset(local.azs)
+
   name        = "demo-database-subnet-groups"
   description = "Subnet groups the demo RDS database should be able to connect to."
 
   subnet_ids = [
-    aws_subnet.demoprivatesubnet1.id, #configure a private subnet and replace this later
-    aws_subnet.demoprivatesubnet2.id
+    aws_subnet.demoprivatesubnet1[each.key], #configure a private subnet and replace this later
+    aws_subnet.demoprivatesubnet2[each.key]
   ]
 
   tags = {
-    Name = "DB Subnets"
+    Name = "DB_Subnets"
   }
 }
 
 resource "aws_db_instance" "demordsdb" {
+  for_each = toset(local.azs)
+  
   allocated_storage    = 10
   db_name              = "mydb"
   engine               = "mysql"
@@ -187,5 +232,5 @@ resource "aws_db_instance" "demordsdb" {
   skip_final_snapshot  = true
 
   #Connects the rds instance to demodbsubnets grouping
-  db_subnet_group_name = aws_db_subnet_group.demodbsubnets.id
+  db_subnet_group_name = aws_db_subnet_group.demodbsubnets[each.key]
 }

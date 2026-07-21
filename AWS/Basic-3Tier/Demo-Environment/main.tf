@@ -76,6 +76,13 @@ resource "aws_security_group" "nginxsecuritygroup" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    from_port = "22"
+    to_port = "22"
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -93,6 +100,13 @@ resource "aws_security_group" "appsecuritygroup" {
     to_port     = "443"
     protocol    = "tcp"
     cidr_blocks = ["10.0.1.0/24", "10.0.0.0/24"]
+  }
+
+  ingress {
+    from_port = "22"
+    to_port = "22"
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -114,7 +128,7 @@ resource "aws_instance" "demonginx" {
 
   user_data = <<EOF
 #! /bin/bash
-sudo amazon-linux-extras install -y demonginx
+sudo amazon-linux-extras install -y nginx
 sudo service nginx start
 sudo rm /usr/share/nginx/html/index.html
 sudo cat > /usr/share/nginx/html/index.html << 'WEBSITE'
